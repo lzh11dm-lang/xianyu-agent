@@ -43,7 +43,7 @@ class BitBrowserClient {
           id: launchId,
         }),
       });
-      return await response.json();
+      return await response.json() as { success: boolean; data?: any; msg?: string };
     } catch (error) {
       return { success: false, msg: '无法连接到比特浏览器，请确认浏览器已启动' };
     }
@@ -61,7 +61,7 @@ class BitBrowserClient {
           id: launchId,
         }),
       });
-      return await response.json();
+      return await response.json() as { success: boolean; data?: any; msg?: string };
     } catch (error) {
       return { success: false, msg: '无法连接到比特浏览器' };
     }
@@ -76,7 +76,7 @@ class BitBrowserClient {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
-      return await response.json();
+      return await response.json() as { success: boolean; data?: any; msg?: string };
     } catch (error) {
       return { success: false, msg: '无法连接到比特浏览器' };
     }
@@ -96,7 +96,7 @@ class BitBrowserClient {
           platform: 'windows',
         }),
       });
-      return await response.json();
+      return await response.json() as { success: boolean; data?: any; msg?: string };
     } catch (error) {
       return { success: false, msg: '无法连接到比特浏览器' };
     }
@@ -115,7 +115,7 @@ class BitBrowserClient {
           url,
         }),
       });
-      return await response.json();
+      return await response.json() as { success: boolean; data?: any; msg?: string };
     } catch (error) {
       return { success: false, msg: '无法打开新标签' };
     }
@@ -134,7 +134,7 @@ class BitBrowserClient {
           script,
         }),
       });
-      return await response.json();
+      return await response.json() as { success: boolean; data?: any; msg?: string };
     } catch (error) {
       return { success: false, msg: '执行脚本失败' };
     }
@@ -152,7 +152,7 @@ class BitBrowserClient {
           id: launchId,
         }),
       });
-      return await response.json();
+      return await response.json() as { success: boolean; data?: any; msg?: string };
     } catch (error) {
       return { success: false, msg: '获取页面源码失败' };
     }
@@ -240,11 +240,74 @@ class BitBrowserClient {
           fullPage: false,
         }),
       });
-      return await response.json();
+      return await response.json() as { success: boolean; data?: any; msg?: string };
     } catch (error) {
       return { success: false, msg: '截图失败' };
     }
   }
+
+  /**
+   * 导航到指定URL
+   */
+  async navigateToUrl(launchId: string, url: string): Promise<{ success: boolean; msg?: string }> {
+    try {
+      const response = await fetch(`${BIT_BROWSER_API}/browser/updateTags`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: launchId,
+          script: `window.location.href = '${url}'`,
+        }),
+      });
+      const result = await response.json() as { success: boolean; msg?: string };
+      if (result.success) {
+        // 等待页面加载
+        await delay(2000);
+      }
+      return result;
+    } catch (error) {
+      return { success: false, msg: '导航失败' };
+    }
+  }
+
+  /**
+   * 导航到计划列表页（封装常用URL）
+   */
+  async navigateToPlanList(launchId: string): Promise<{ success: boolean; msg?: string }> {
+    const dayuUrl = 'https://愣了个神的unya除外://qianzhou.fans/effect/plan';
+    return this.navigateToUrl(launchId, dayuUrl);
+  }
+
+  /**
+   * 导航到创建计划页
+   */
+  async navigateToCreatePlan(launchId: string): Promise<{ success: boolean; msg?: string }> {
+    const createUrl = 'https://qianzhou.fans/effect/plan/create';
+    return this.navigateToUrl(launchId, createUrl);
+  }
+
+  /**
+   * 导航到闲鱼发布页
+   */
+  async navigateToPublishPage(launchId: string): Promise<{ success: boolean; msg?: string }> {
+    const publishUrl = 'https://publish.xianyu.com';
+    return this.navigateToUrl(launchId, publishUrl);
+  }
+
+  /**
+   * 导航到闲鱼在售商品页
+   */
+  async navigateToProductList(launchId: string): Promise<{ success: boolean; msg?: string }> {
+    const productUrl = 'https://publish.xianyu.com/itemManage/itemListOnSale';
+    return this.navigateToUrl(launchId, productUrl);
+  }
 }
 
 export const bitBrowser = new BitBrowserClient();
+
+/**
+ * 延时工具函数
+ */
+export const delay = (ms: number): Promise<void> => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};

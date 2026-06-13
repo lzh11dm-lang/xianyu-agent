@@ -64,7 +64,7 @@ export default function HomeScreen() {
           {
             id: 'welcome',
             role: 'assistant',
-            content: '🐟 你好！我是咸鱼运营助手。\n\n请确保比特浏览器已运行并登录闲鱼账号，我就能帮你：\n• 自动创建投流计划\n• 查看投流数据\n• 执行各种运营操作\n\n有什么可以帮你的？',
+            content: '你好！我是咸鱼运营助手。\n\n请确保比特浏览器已运行并登录闲鱼账号，我就能帮你：\n• 自动创建投流计划\n• 查看投流数据\n• 执行各种运营操作\n\n有什么可以帮你的？',
             timestamp: Date.now(),
           },
         ]);
@@ -111,7 +111,7 @@ export default function HomeScreen() {
         {
           id: `error-${Date.now()}`,
           role: 'assistant',
-          content: '⚠️ 网络连接失败，请确保后端服务已启动。',
+          content: '网络连接失败，请确保后端服务已启动。',
           timestamp: Date.now(),
         },
       ]);
@@ -185,7 +185,7 @@ export default function HomeScreen() {
                       ? 'text-amber-800 dark:text-amber-200'
                       : 'text-gray-800 dark:text-gray-100'
                   }`}
-                  style={{ whiteSpace: 'pre-wrap' }}
+                  
                 >
                   {msg.content}
                 </Text>

@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { FontAwesome6 } from '@expo/vector-icons';
 
 interface QuickAction {
   id: string;
@@ -8,10 +9,10 @@ interface QuickAction {
 }
 
 const quickActions: QuickAction[] = [
-  { id: '1', icon: '🔗', label: '连接浏览器', action: '连接比特浏览器' },
-  { id: '2', icon: '📊', label: '创建曝光计划', action: '帮我创建一个曝光计划，出价20元，日预算40元' },
-  { id: '3', icon: '📋', label: '查看投流状态', action: '查看当前所有投流计划的状态' },
-  { id: '4', icon: '🔄', label: '刷新数据', action: '刷新最新的投流数据' },
+  { id: '1', icon: 'link', label: '连接浏览器', action: '连接比特浏览器' },
+  { id: '2', icon: 'chart-line', label: '创建曝光计划', action: '帮我创建一个曝光计划，出价20元，日预算40元' },
+  { id: '3', icon: 'list-check', label: '查看投流状态', action: '查看当前所有投流计划的状态' },
+  { id: '4', icon: 'rotate', label: '刷新数据', action: '刷新最新的投流数据' },
 ];
 
 interface QuickActionsProps {
@@ -35,8 +36,8 @@ export function QuickActions({ onSelect, isConnected }: QuickActionsProps) {
               }`}
               disabled={!isConnected && item.id !== '1'}
             >
-              <Text className="text-base mr-1">{item.icon}</Text>
-              <Text className="text-gray-300 text-xs">{item.label}</Text>
+              <FontAwesome6 name={item.icon as any} size={14} color={isConnected ? '#00F0FF' : '#9CA3AF'} />
+              <Text className="text-gray-300 text-xs ml-1">{item.label}</Text>
             </TouchableOpacity>
           ))}
         </View>

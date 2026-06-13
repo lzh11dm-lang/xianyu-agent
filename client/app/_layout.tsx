@@ -1,10 +1,11 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { View, Text, StyleSheet } from 'react-native';
+import '../global.css';
+import { Provider } from '@/components/Provider';
 
 export default function RootLayout() {
   return (
-    <>
+    <Provider>
       <StatusBar style="light" />
       <Stack
         screenOptions={{
@@ -12,6 +13,6 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: '#0A0A0F' },
         }}
       />
-    </>
+    </Provider>
   );
 }
