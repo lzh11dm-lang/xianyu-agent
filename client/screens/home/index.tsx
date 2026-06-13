@@ -13,8 +13,10 @@ import {
   Platform,
   ActivityIndicator,
   Alert,
+  StyleSheet,
 } from 'react-native';
 import { Screen } from '@/components/Screen';
+import { useSafeRouter } from '@/hooks/useSafeRouter';
 import { sendMessage, getChatHistory, clearChatHistory, checkBrowserStatus } from '@/services/api';
 
 interface Message {
@@ -25,6 +27,7 @@ interface Message {
 }
 
 export default function HomeScreen() {
+  const router = useSafeRouter();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -156,6 +159,12 @@ export default function HomeScreen() {
                 {isConnected ? '● 已连接' : '○ 未连接'}
               </Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.settingsBtn}
+              onPress={() => router.push('/settings')}
+            >
+              <Text style={styles.settingsBtnText}>设置</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -263,3 +272,13 @@ export default function HomeScreen() {
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  settingsBtn: {
+    padding: 8,
+    marginLeft: 8,
+  },
+  settingsBtnText: {
+    fontSize: 20,
+  },
+});

@@ -12,7 +12,10 @@ export default function RootLayout() {
           headerShown: false,
           contentStyle: { backgroundColor: '#0A0A0F' },
         }}
-      />
+      >
+        <Stack.Screen name="index" />
+        <Stack.Screen name="settings" />
+      </Stack>
     </Provider>
   );
 }
