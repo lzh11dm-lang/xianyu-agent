@@ -9,6 +9,8 @@ import browserRouter from './routes/browser';
 import dayuRouter from './routes/dayu';
 import xianyuRouter from './routes/xianyu';
 import sopRouter from './routes/sop';
+import analyticsRouter from './routes/analytics';
+import accountsRouter from './routes/accounts';
 
 const app = express();
 const PORT = process.env.PORT || 9091;
@@ -38,6 +40,8 @@ app.use('/api/v1/browser', browserRouter);
 app.use('/api/v1/dayu', dayuRouter);
 app.use('/api/v1/xianyu', xianyuRouter);
 app.use('/api/v1/sop', sopRouter);
+app.use('/api/v1/analytics', analyticsRouter);
+app.use('/api/v1/accounts', accountsRouter);
 
 // 404 处理
 app.use((req, res) => {
