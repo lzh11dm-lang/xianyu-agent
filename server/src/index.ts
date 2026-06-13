@@ -63,7 +63,19 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📱 API Base: http://localhost:${PORT}/api/v1`);
-});
+// Vercel Serverless Function 模式
+const startServer = () => {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on http://localhost:${PORT}`);
+    console.log(`📱 API Base: http://localhost:${PORT}/api/v1`);
+  });
+};
+
+// 本地开发启动
+if (process.env.NODE_ENV !== 'production') {
+  startServer();
+}
+
+// Vercel Serverless 导出
+export default app;
+
