@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "2.95.3",
-    "cors": "^2.8.5",
+    "cors": "^2.8.6",
     "coze-coding-dev-sdk": "^0.7.24",
     "dayjs": "^1.11.20",
-    "dotenv": "^17.2.3",
+    "dotenv": "^17.2.4",
     "drizzle-orm": "^0.45.1",
     "drizzle-zod": "^0.8.3",
     "express": "^4.22.1",

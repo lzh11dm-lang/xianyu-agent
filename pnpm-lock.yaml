@@ -266,7 +266,7 @@ importers:
         specifier: 2.95.3
         version: 2.95.3
       cors:
-        specifier: ^2.8.5
+        specifier: ^2.8.6
         version: 2.8.6
       coze-coding-dev-sdk:
         specifier: ^0.7.24
@@ -275,7 +275,7 @@ importers:
         specifier: ^1.11.20
         version: 1.11.20
       dotenv:
-        specifier: ^17.2.3
+        specifier: ^17.2.4
         version: 17.2.4
       drizzle-orm:
         specifier: ^0.45.1
