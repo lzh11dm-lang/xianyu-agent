@@ -1,20 +1,57 @@
-import express from "express";
-import cors from "cors";
+/**
+ * Express 服务入口
+ */
+
+import express from 'express';
+import cors from 'cors';
+import chatRouter from './routes/chat';
+import browserRouter from './routes/browser';
 
 const app = express();
-const port = process.env.PORT || 9091;
+const PORT = process.env.PORT || 9091;
 
-// Middleware
+// 中间件
 app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json());
 
-app.get('/api/v1/health', (req, res) => {
-  console.log('Health check success');
-  res.status(200).json({ status: 'ok' });
+// 请求日志
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  next();
 });
 
+// 健康检查
+app.get('/api/v1/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    version: '1.0.0',
+  });
+});
 
-app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}/`);
+// 路由
+app.use('/api/v1/chat', chatRouter);
+app.use('/api/v1/browser', browserRouter);
+
+// 404 处理
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    msg: '接口不存在',
+    path: req.path,
+  });
+});
+
+// 错误处理
+app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error('Server error:', err);
+  res.status(500).json({
+    success: false,
+    msg: '服务器内部错误',
+  });
+});
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`📱 API Base: http://localhost:${PORT}/api/v1`);
 });
