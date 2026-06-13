@@ -2,20 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "dist/index.js",
+      "src": "api/**/*.ts",
       "use": "@vercel/node"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "dist/index.js"
+      "source": "/api/(.*)",
+      "destination": "/api/index"
     },
     {
-      "src": "/(.*)",
-      "dest": "dist/index.js"
+      "source": "/(.*)",
+      "destination": "/api/index"
     }
-  ],
-  "installCommand": "pnpm install",
-  "buildCommand": "pnpm run build"
+  ]
 }
