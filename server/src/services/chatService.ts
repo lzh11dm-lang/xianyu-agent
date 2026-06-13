@@ -1,6 +1,8 @@
 /**
- * 聊天服务 - 解析用户意图并执行对应操作
+ * 聊天服务 - 使用 Kimi AI 进行智能对话
  */
+
+import { chatWithKimi, streamChatWithKimi } from './kimiService';
 
 export interface ChatMessage {
   role: 'user' | 'assistant' | 'system';
@@ -14,7 +16,100 @@ export interface IntentResult {
 }
 
 /**
- * 意图识别
+ * 使用 Kimi AI 进行对话
+ */
+export async function chatWithAI(
+  message: string,
+  history: ChatMessage[] = []
+): Promise<string> {
+  try {
+    // 将历史消息转换为 Kimi 格式
+    const conversationHistory = history.map((msg) => ({
+      role: msg.role as 'user' | 'assistant',
+      content: msg.content,
+    }));
+
+    // 调用 Kimi API
+    const response = await chatWithKimi(message, conversationHistory);
+    return response;
+  } catch (error) {
+    console.error('Kimi AI 调用失败:', error);
+    // 如果 Kimi 失败，fallback 到规则匹配
+    return fallbackToRuleBased(message);
+  }
+}
+
+/**
+ * 流式对话
+ */
+export async function* streamChatWithAI(
+  message: string,
+  history: ChatMessage[] = []
+): AsyncGenerator<string> {
+  try {
+    const conversationHistory = history.map((msg) => ({
+      role: msg.role as 'user' | 'assistant',
+      content: msg.content,
+    }));
+
+    yield* streamChatWithKimi(message, conversationHistory);
+  } catch (error) {
+    console.error('Kimi AI 流式调用失败:', error);
+    yield 'AI 服务暂时不可用，请稍后重试。';
+  }
+}
+
+/**
+ * Fallback 到规则匹配
+ */
+function fallbackToRuleBased(message: string): string {
+  const msg = message.toLowerCase().trim();
+
+  // 连接浏览器
+  if (msg.includes('连接') && (msg.includes('浏览器') || msg.includes('比特'))) {
+    return '好的，正在连接比特浏览器...';
+  }
+
+  // 查看账号
+  if (msg.includes('账号') || msg.includes('账户')) {
+    return '好的，正在查看账号状态...\n\n请在设置页面中添加你的比特浏览器席位。';
+  }
+
+  // 查看 SOP
+  if (msg.includes('sop') || msg.includes('流程') || msg.includes('步骤')) {
+    return `📋 闲鱼投流 SOP 流程：
+
+**阶段一：上架 + 曝光赛马**
+- 上架 5 条同类链接
+- 开曝光计划（出价 20 元，日预算 40 元）
+- 跑 1-2 小时后选出 1-2 条优质链接
+
+**阶段二：咨询计划**
+- 选出 1-2 条链接
+- 开咨询计划（120% 成本出价，日预算 50 元）
+- 补单动作
+
+**阶段三：观察 + 调整**
+- 每日盯数据
+- 点击率低 → 换主图/标题
+- 消耗不出去 → 提成本 20%
+- 还不出去 → 养曝光（日预算 15 元跑 2-3 天）
+
+**阶段四：淘汰**
+- 优化动作都做完仍不行 → 上新链接继续赛马`;
+  }
+
+  // 数据分析
+  if (msg.includes('数据') || msg.includes('分析')) {
+    return '好的，正在分析数据...\n\n请问你想分析哪个账号的数据？或者直接告诉我你观察到的问题。';
+  }
+
+  // 默认回复
+  return `我理解了你的问题。\n\n作为咸鱼运营 Agent，我可以帮你：\n• 上架商品\n• 管理投流计划\n• 盯数据和复盘\n• 根据 SOP 给出调整建议\n\n请具体告诉我你想做什么？`;
+}
+
+/**
+ * 意图识别（保留用于简单指令）
  */
 export function parseIntent(message: string): IntentResult {
   const msg = message.toLowerCase().trim();
